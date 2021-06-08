@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>minido - productivity tool</title>
+    <link rel="stylesheet" type="text/css"href="popup.css" />
+    <!-- Import jQuery, Google Icons and Open Sans Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="gsapminified/gsap.min.js"></script>
+</head>
+
+  <body>   
+<!-- List wrapper -->
+<div id="listWrapper">
+  
+  <!-- List title -->
+  <div id="title">
+    <input id="titleInput" type="text" placeholder="My List" maxlength="21" value="">
+    <i id="pencilicon" class="material-icons">edit</i>
+  </div>
+
+  <div id="separator"></div>
+
+  <!-- To do items -->
+  <div id="itemsWrapper">
+    <div class="item">
+      <!-- New items are created here -->
+    </div>
+  </div>
+
+  <!-- Add a new item -->
+  <div id="addNewItemWrapper">
+    <input type="text" placeholder="New Task" id="addNewItemInput" maxlength="30">
+    <button id="addNewItemBtn"><i id="addicon" class="material-icons">add</i></button>
+  </div>
+  <div class="modal-footer"><p> Made by Dan Kabakov <script> document.write(new Date().getFullYear()) </script></p>
+    
+  </div>
+</div>
+
+    
+    <script src="popup.js"></script>
+    
+  </body>
+</html>
+
+
+

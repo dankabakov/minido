@@ -1,0 +1,16 @@
+  {
+    "manifest_version": 2,
+  
+    "name": "minido",
+    "description": "one stop for your productivity",
+    "version": "1.0.0",
+    "icons": {"128": "main-icon.png"},
+    "browser_action": {
+        "default_icon": "main-icon.png",
+        "default_popup": "popup.html",
+        "default_title": "minido"
+    },
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
+    "permissions": ["activeTab", "storage"]
+    
+  }
