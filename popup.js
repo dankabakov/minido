@@ -1,19 +1,11 @@
 
 // Get previous Data
-const taskList = [];
 let toDoList = {
   listName: "",
   tasks: [
-    {"name": "Clean Room", "done": false},
-    {"name": "Buy Food", "done": false},
-    {"name": "Do Code", "done": false}
+    {"name": "", "done": Boolean}
   ]
 }
-
-console.log(toDoList.listName);
-$("#titleInput").val(toDoList.listName);
-
-console.log(toDoList.tasks);
 
 chrome.storage.sync.get(["toDoListBackup"], function(e) {
 $("#titleInput").val(e.toDoListBackup.listName);
@@ -21,14 +13,27 @@ toDoList = e.toDoListBackup;
 
 /* Function: Recreate tasks from tasksList */
 $.each(toDoList.tasks, function(index, value) { 
-  $(".item").append(
-    `<div class="itemInner">
-      <i class="emptybox material-icons">check_box_outline_blank</i>
-      <p>${value.name}</p>
-      <button class="removeItemBtn">
-      <i class="deleteIcon material-icons">delete</i>
-      </button>
-     </div>`)
+  if (value.done === false) {
+    $(".item").append(
+      `<div class="itemInner">
+        <i class="emptybox material-icons">check_box_outline_blank</i>
+        <p>${value.name}</p>
+        <button class="removeItemBtn">
+        <i class="deleteIcon material-icons">delete</i>
+        </button>
+       </div>`)
+  } else if (value.done === true) {
+    $(".item").append(
+      `<div class="itemInner">
+        <i class="fullbox material-icons">check_box</i>
+        <p class="selected" style="text-decoration: line-through">${value.name}</p>
+        <button class="removeItemBtn">
+        <i class="deleteIcon material-icons">delete</i>
+        </button>
+       </div>`
+       )
+  }
+  
   });
 });
 
@@ -58,9 +63,7 @@ if ($("#addNewItemInput").val() == "") {
   gsap.to("#addNewItemInput", .1, {delay: .4, x: 0});
 } else {
   const newItemInput = $("#addNewItemInput").val()
-  taskList.push(newItemInput);
   toDoList.tasks.push({name: newItemInput, done: false});
-  console.log(toDoList);
   chrome.storage.sync.set({"toDoListBackup": toDoList});
 $(".item").append(
   `<div class="itemInner">
@@ -76,7 +79,6 @@ gsap.to(".itemsWrapper, .item", .3, {delay: .15, paddingBottom: 8, y: 0, ease: B
 }
 })
 
-
 /* Function: Completed item */
 $(".item").on("click", ".material-icons", (e) => {
 const clickedText = e.target.parentElement.getElementsByTagName("p");
@@ -88,6 +90,14 @@ $(emptyIconBox).text("check_box");
 $(emptyIconBox).addClass("fullbox");
 $(emptyIconBox).removeClass("emptybox");
 $(clickedText).css({"text-decoration": "line-through"});
+const checkedText = $(clickedText).text();
+for( var i = 0; i < toDoList.tasks.length; i++){ 
+  console.log(toDoList.tasks[i]);
+  if ( toDoList.tasks[i].name === checkedText) { 
+    toDoList.tasks[i].done = true; 
+  }
+}
+chrome.storage.sync.set({"toDoListBackup": toDoList});
 
 } else if ($(clickedIcon).hasClass("fullbox")) {
 const fullIconBox = e.target.parentElement.getElementsByClassName("fullbox");
@@ -95,6 +105,14 @@ $(fullIconBox).text("check_box_outline_blank");
 $(fullIconBox).addClass("emptybox");
 $(fullIconBox).removeClass("fullbox");
 $(clickedText).css({"text-decoration": "none"});
+const uncheckedText = $(clickedText).text();
+for( var i = 0; i < toDoList.tasks.length; i++){ 
+  console.log(toDoList.tasks[i]);
+  if ( toDoList.tasks[i].name === uncheckedText) { 
+    toDoList.tasks[i].done = false; 
+  }
+}
+chrome.storage.sync.set({"toDoListBackup": toDoList});
 }
 })
 
