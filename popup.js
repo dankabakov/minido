@@ -1,8 +1,8 @@
 
 // Get previous Data
 const taskList = [];
-const toDoList = {
-  listName: "Snoop Dogg",
+let toDoList = {
+  listName: "",
   tasks: [
     {"name": "Clean Room", "done": false},
     {"name": "Buy Food", "done": false},
@@ -13,19 +13,18 @@ const toDoList = {
 console.log(toDoList.listName);
 $("#titleInput").val(toDoList.listName);
 
-chrome.storage.sync.get(["list", "toDoListBackup"], function(task) {
-$("#titleInput").val(task.toDoListBackup.listName);
-console.log(toDoListBackup);
-$.each(task.list, function(index, value) { 
-  // taskList.push(value);
-});
+console.log(toDoList.tasks);
+
+chrome.storage.sync.get(["toDoListBackup"], function(e) {
+$("#titleInput").val(e.toDoListBackup.listName);
+toDoList = e.toDoListBackup;
 
 /* Function: Recreate tasks from tasksList */
-$.each(taskList, function(index, value) { 
+$.each(toDoList.tasks, function(index, value) { 
   $(".item").append(
     `<div class="itemInner">
       <i class="emptybox material-icons">check_box_outline_blank</i>
-      <p>${value}</p>
+      <p>${value.name}</p>
       <button class="removeItemBtn">
       <i class="deleteIcon material-icons">delete</i>
       </button>
@@ -49,9 +48,6 @@ if (e.keyCode == 13) {
 }
 })
 
-
-
-
 /* Function: Add a new item */
 $("#addNewItemBtn").on("click", () => {
 if ($("#addNewItemInput").val() == "") {
@@ -63,7 +59,9 @@ if ($("#addNewItemInput").val() == "") {
 } else {
   const newItemInput = $("#addNewItemInput").val()
   taskList.push(newItemInput);
-  chrome.storage.sync.set({"list": taskList});
+  toDoList.tasks.push({name: newItemInput, done: false});
+  console.log(toDoList);
+  chrome.storage.sync.set({"toDoListBackup": toDoList});
 $(".item").append(
   `<div class="itemInner">
     <i class="emptybox material-icons">check_box_outline_blank</i>
@@ -107,13 +105,13 @@ $(".item").on("click", "button.removeItemBtn", (e) => {
   $(e.target.parentElement).remove();
 
   console.log("Task to Delete: " + deleteText);
-  for( var i = 0; i < taskList.length; i++){ 
-    console.log(taskList[i]);
-    if ( taskList[i] === deleteText) { 
-      taskList.splice(i, 1); 
+  for( var i = 0; i < toDoList.tasks.length; i++){ 
+    console.log(toDoList.tasks[i]);
+    if ( toDoList.tasks[i].name === deleteText) { 
+      toDoList.tasks.splice(i, 1); 
     }
   }
-  chrome.storage.sync.set({"list": taskList});
+  chrome.storage.sync.set({"toDoListBackup": toDoList});
 
 gsap.to(".itemsWrapper, .item", 0, {paddingBottom: 52})
 gsap.to(".itemsWrapper, .item", .3, {paddingBottom: 8, ease: Back.easeOut})

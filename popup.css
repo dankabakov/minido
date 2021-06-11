@@ -3,18 +3,7 @@
     outline: none;
   }
   
-  /* Center the list */
-  body {
-    margin: 0;
-    height: 400vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    display:block
-
-  }
+  
   
   #listWrapper {
     background: white;
